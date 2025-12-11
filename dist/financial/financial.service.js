@@ -152,7 +152,7 @@ let FinancialService = class FinancialService {
                     categoryData.iconCodePoint = category.iconCodePoint;
                 }
                 if (category.colorValue != null) {
-                    categoryData.colorValue = category.colorValue;
+                    categoryData.colorValue = String(category.colorValue);
                 }
                 if (category.notes) {
                     categoryData.notes = category.notes;

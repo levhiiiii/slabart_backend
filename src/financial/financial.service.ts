@@ -178,7 +178,8 @@ export class FinancialService {
           categoryData.iconCodePoint = category.iconCodePoint;
         }
         if (category.colorValue != null) {
-          categoryData.colorValue = category.colorValue;
+          // Store as string for bigint column
+          categoryData.colorValue = String(category.colorValue);
         }
         if (category.notes) {
           categoryData.notes = category.notes;

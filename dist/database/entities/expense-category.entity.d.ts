@@ -7,7 +7,7 @@ export declare class ExpenseCategoryEntity {
     currency: string;
     icon: string;
     iconCodePoint: number;
-    colorValue: number;
+    colorValue: string;
     notes: string;
     isActive: boolean;
     createdAt: Date;

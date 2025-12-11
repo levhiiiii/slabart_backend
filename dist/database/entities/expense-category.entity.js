@@ -57,8 +57,8 @@ __decorate([
     __metadata("design:type", Number)
 ], ExpenseCategoryEntity.prototype, "iconCodePoint", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", Number)
+    (0, typeorm_1.Column)({ type: 'bigint', nullable: true }),
+    __metadata("design:type", String)
 ], ExpenseCategoryEntity.prototype, "colorValue", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),

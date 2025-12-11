@@ -32,8 +32,8 @@ export class ExpenseCategoryEntity {
   @Column({ nullable: true })
   iconCodePoint: number;
 
-  @Column({ nullable: true })
-  colorValue: number;
+  @Column({ type: 'bigint', nullable: true })
+  colorValue: string; // bigint stored as string in TypeORM
 
   @Column({ nullable: true })
   notes: string;
