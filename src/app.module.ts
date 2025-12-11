@@ -9,6 +9,7 @@ import { ExpensesModule } from './expenses/expenses.module';
 import { LoansModule } from './loans/loans.module';
 import { BorrowModule } from './borrow/borrow.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { FinancialModule } from './financial/financial.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     LoansModule,
     BorrowModule,
     DashboardModule,
+    FinancialModule,
   ],
   controllers: [AppController],
   providers: [AppService],

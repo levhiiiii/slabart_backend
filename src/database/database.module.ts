@@ -7,6 +7,9 @@ import { ExpenseEntity } from './entities/expense.entity';
 import { LoanEntity } from './entities/loan.entity';
 import { EMIEntity } from './entities/emi.entity';
 import { BorrowEntity } from './entities/borrow.entity';
+import { IncomeSourceEntity } from './entities/income-source.entity';
+import { GoalEntity } from './entities/goal.entity';
+import { ExpenseCategoryEntity } from './entities/expense-category.entity';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { BorrowEntity } from './entities/borrow.entity';
           LoanEntity,
           EMIEntity,
           BorrowEntity,
+          IncomeSourceEntity,
+          GoalEntity,
+          ExpenseCategoryEntity,
         ],
         synchronize: true, // Set to false in production
         ssl: configService.get('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,

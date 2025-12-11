@@ -2,6 +2,9 @@ import { SalaryEntity } from './salary.entity';
 import { ExpenseEntity } from './expense.entity';
 import { LoanEntity } from './loan.entity';
 import { BorrowEntity } from './borrow.entity';
+import { IncomeSourceEntity } from './income-source.entity';
+import { GoalEntity } from './goal.entity';
+import { ExpenseCategoryEntity } from './expense-category.entity';
 export declare class UserEntity {
     id: string;
     email: string;
@@ -11,6 +14,9 @@ export declare class UserEntity {
     isEmailVerified: boolean;
     password: string;
     firebaseUid: string;
+    monthlySalary: number;
+    salaryDate: number;
+    isFinancialSetupComplete: boolean;
     createdAt: Date;
     updatedAt: Date;
     lastLoginAt: Date;
@@ -18,4 +24,7 @@ export declare class UserEntity {
     expenses: ExpenseEntity[];
     loans: LoanEntity[];
     borrows: BorrowEntity[];
+    incomeSources: IncomeSourceEntity[];
+    goals: GoalEntity[];
+    expenseCategories: ExpenseCategoryEntity[];
 }

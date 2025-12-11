@@ -16,6 +16,9 @@ const salary_entity_1 = require("./salary.entity");
 const expense_entity_1 = require("./expense.entity");
 const loan_entity_1 = require("./loan.entity");
 const borrow_entity_1 = require("./borrow.entity");
+const income_source_entity_1 = require("./income-source.entity");
+const goal_entity_1 = require("./goal.entity");
+const expense_category_entity_1 = require("./expense-category.entity");
 let UserEntity = class UserEntity {
     id;
     email;
@@ -25,6 +28,9 @@ let UserEntity = class UserEntity {
     isEmailVerified;
     password;
     firebaseUid;
+    monthlySalary;
+    salaryDate;
+    isFinancialSetupComplete;
     createdAt;
     updatedAt;
     lastLoginAt;
@@ -32,6 +38,9 @@ let UserEntity = class UserEntity {
     expenses;
     loans;
     borrows;
+    incomeSources;
+    goals;
+    expenseCategories;
 };
 exports.UserEntity = UserEntity;
 __decorate([
@@ -68,6 +77,18 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "firebaseUid", void 0);
 __decorate([
+    (0, typeorm_1.Column)('decimal', { precision: 12, scale: 2, nullable: true }),
+    __metadata("design:type", Number)
+], UserEntity.prototype, "monthlySalary", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], UserEntity.prototype, "salaryDate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], UserEntity.prototype, "isFinancialSetupComplete", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], UserEntity.prototype, "createdAt", void 0);
@@ -95,6 +116,18 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => borrow_entity_1.BorrowEntity, (borrow) => borrow.user),
     __metadata("design:type", Array)
 ], UserEntity.prototype, "borrows", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => income_source_entity_1.IncomeSourceEntity, (incomeSource) => incomeSource.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "incomeSources", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => goal_entity_1.GoalEntity, (goal) => goal.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "goals", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => expense_category_entity_1.ExpenseCategoryEntity, (category) => category.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "expenseCategories", void 0);
 exports.UserEntity = UserEntity = __decorate([
     (0, typeorm_1.Entity)('users')
 ], UserEntity);

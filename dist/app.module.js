@@ -18,6 +18,7 @@ const expenses_module_1 = require("./expenses/expenses.module");
 const loans_module_1 = require("./loans/loans.module");
 const borrow_module_1 = require("./borrow/borrow.module");
 const dashboard_module_1 = require("./dashboard/dashboard.module");
+const financial_module_1 = require("./financial/financial.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,6 +36,7 @@ exports.AppModule = AppModule = __decorate([
             loans_module_1.LoansModule,
             borrow_module_1.BorrowModule,
             dashboard_module_1.DashboardModule,
+            financial_module_1.FinancialModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

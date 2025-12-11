@@ -16,6 +16,9 @@ const expense_entity_1 = require("./entities/expense.entity");
 const loan_entity_1 = require("./entities/loan.entity");
 const emi_entity_1 = require("./entities/emi.entity");
 const borrow_entity_1 = require("./entities/borrow.entity");
+const income_source_entity_1 = require("./entities/income-source.entity");
+const goal_entity_1 = require("./entities/goal.entity");
+const expense_category_entity_1 = require("./entities/expense-category.entity");
 let DatabaseModule = class DatabaseModule {
 };
 exports.DatabaseModule = DatabaseModule;
@@ -38,6 +41,9 @@ exports.DatabaseModule = DatabaseModule = __decorate([
                         loan_entity_1.LoanEntity,
                         emi_entity_1.EMIEntity,
                         borrow_entity_1.BorrowEntity,
+                        income_source_entity_1.IncomeSourceEntity,
+                        goal_entity_1.GoalEntity,
+                        expense_category_entity_1.ExpenseCategoryEntity,
                     ],
                     synchronize: true,
                     ssl: configService.get('DB_SSL') === 'true' ? { rejectUnauthorized: false } : false,
