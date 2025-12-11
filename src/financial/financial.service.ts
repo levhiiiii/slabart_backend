@@ -165,17 +165,26 @@ export class FinancialService {
 
     // Insert new expense categories
     if (categories && categories.length > 0) {
-      const entities = categories.map((category: any) =>
-        this.expenseCategoryRepository.create({
+      const entities = categories.map((category: any) => {
+        const categoryData: any = {
           userId,
-          name: category.name,
-          monthlyBudget: category.monthlyBudget,
-          icon: category.icon,
-          iconCodePoint: category.iconCodePoint,
-          colorValue: category.colorValue,
-          notes: category.notes,
-        }),
-      );
+          name: category.name || 'Unnamed Category',
+          monthlyBudget: category.monthlyBudget || 0,
+        };
+        if (category.icon) {
+          categoryData.icon = category.icon;
+        }
+        if (category.iconCodePoint != null) {
+          categoryData.iconCodePoint = category.iconCodePoint;
+        }
+        if (category.colorValue != null) {
+          categoryData.colorValue = category.colorValue;
+        }
+        if (category.notes) {
+          categoryData.notes = category.notes;
+        }
+        return this.expenseCategoryRepository.create(categoryData);
+      });
       await this.expenseCategoryRepository.save(entities);
     }
 

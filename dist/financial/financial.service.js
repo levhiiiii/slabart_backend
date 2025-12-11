@@ -139,15 +139,26 @@ let FinancialService = class FinancialService {
         const { categories } = data;
         await this.expenseCategoryRepository.delete({ userId });
         if (categories && categories.length > 0) {
-            const entities = categories.map((category) => this.expenseCategoryRepository.create({
-                userId,
-                name: category.name,
-                monthlyBudget: category.monthlyBudget,
-                icon: category.icon,
-                iconCodePoint: category.iconCodePoint,
-                colorValue: category.colorValue,
-                notes: category.notes,
-            }));
+            const entities = categories.map((category) => {
+                const categoryData = {
+                    userId,
+                    name: category.name || 'Unnamed Category',
+                    monthlyBudget: category.monthlyBudget || 0,
+                };
+                if (category.icon) {
+                    categoryData.icon = category.icon;
+                }
+                if (category.iconCodePoint != null) {
+                    categoryData.iconCodePoint = category.iconCodePoint;
+                }
+                if (category.colorValue != null) {
+                    categoryData.colorValue = category.colorValue;
+                }
+                if (category.notes) {
+                    categoryData.notes = category.notes;
+                }
+                return this.expenseCategoryRepository.create(categoryData);
+            });
             await this.expenseCategoryRepository.save(entities);
         }
         return { success: true, message: 'Expense categories saved successfully' };
