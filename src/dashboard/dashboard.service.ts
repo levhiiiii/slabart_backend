@@ -164,14 +164,14 @@ export class DashboardService {
     const activeGoals = goals.filter(g => g.status === GoalStatus.ACTIVE || g.status === GoalStatus.COMPLETED);
     const completedGoals = goals.filter(g => g.status === GoalStatus.COMPLETED).length;
 
-    // Calculate spending by category
+    // Calculate spending by category from actual expenses
     const categorySpending = new Map<string, number>();
     monthlyExpenses.forEach(expense => {
       const category = expense.category || 'other';
       categorySpending.set(category, (categorySpending.get(category) || 0) + Number(expense.amount));
     });
 
-    const spendingByCategory = Array.from(categorySpending.entries())
+    let spendingByCategory = Array.from(categorySpending.entries())
       .map(([category, amount]) => ({
         category: this.formatCategoryName(category),
         amount,
@@ -180,6 +180,21 @@ export class DashboardService {
       }))
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 5);
+
+    // If no actual expenses, show budget categories from onboarding
+    if (spendingByCategory.length === 0 && expenseCategories.length > 0) {
+      const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
+      spendingByCategory = expenseCategories
+        .filter(c => Number(c.monthlyBudget || 0) > 0)
+        .map(c => ({
+          category: c.name || 'Other',
+          amount: Number(c.monthlyBudget || 0),
+          percentage: totalBudgetAmount > 0 ? Math.round((Number(c.monthlyBudget || 0) / totalBudgetAmount) * 100) : 0,
+          iconCodePoint: c.iconCodePoint || this.getCategoryIconCodePoint(c.name?.toLowerCase() || 'other'),
+        }))
+        .sort((a, b) => b.amount - a.amount)
+        .slice(0, 5);
+    }
 
     // Build recent transactions (combine salaries and expenses)
     const recentTransactions: DashboardSummary['recentTransactions'] = [];
@@ -209,6 +224,49 @@ export class DashboardService {
         iconCodePoint: this.getCategoryIconCodePoint(expense.category),
       });
     });
+
+    // If no transactions, show onboarding summary items
+    if (recentTransactions.length === 0) {
+      // Show monthly salary as upcoming income
+      if (user?.monthlySalary && Number(user.monthlySalary) > 0) {
+        recentTransactions.push({
+          id: 'salary-upcoming',
+          title: 'Monthly Salary',
+          category: 'Income',
+          amount: Number(user.monthlySalary),
+          isIncome: true,
+          date: new Date(),
+          iconCodePoint: 0xe8d4, // account_balance_wallet
+        });
+      }
+
+      // Show active loans as EMI payments
+      activeLoans.slice(0, 2).forEach(loan => {
+        const emiAmount = Number(loan.principalAmount) / (loan.tenureMonths || 12);
+        recentTransactions.push({
+          id: loan.id,
+          title: loan.description || loan.lenderName || 'Loan EMI',
+          category: 'EMI Payment',
+          amount: emiAmount,
+          isIncome: false,
+          date: loan.nextPaymentDate || new Date(),
+          iconCodePoint: 0xe84f, // credit_card
+        });
+      });
+
+      // Show goals as savings targets
+      goals.filter(g => g.status === GoalStatus.ACTIVE).slice(0, 2).forEach(goal => {
+        recentTransactions.push({
+          id: goal.id,
+          title: goal.name || 'Savings Goal',
+          category: 'Goal',
+          amount: Number(goal.monthlyContribution || 0),
+          isIncome: false,
+          date: new Date(),
+          iconCodePoint: goal.iconCodePoint || 0xe8e5, // flag
+        });
+      });
+    }
 
     // Sort by date
     recentTransactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
