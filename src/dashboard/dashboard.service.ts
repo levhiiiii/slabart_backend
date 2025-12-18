@@ -150,6 +150,16 @@ export class DashboardService {
     const actualMonthlyExpense = monthlyExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
     const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
 
+    // Debug logging
+    console.log('Dashboard Debug:', {
+      userId,
+      expenseCategoriesCount: expenseCategories.length,
+      expenseCategories: expenseCategories.map(c => ({ name: c.name, budget: c.monthlyBudget })),
+      totalBudgetAmount,
+      actualMonthlyExpense,
+      monthlyIncome,
+    });
+
     // If no actual expenses yet, show budget as expected expense (for new users after onboarding)
     const totalMonthlyExpense = actualMonthlyExpense > 0 ? actualMonthlyExpense : totalBudgetAmount;
 
