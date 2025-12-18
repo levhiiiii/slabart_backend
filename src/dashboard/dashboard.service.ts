@@ -184,12 +184,13 @@ export class DashboardService {
     // If no actual expenses, show budget categories from onboarding
     if (spendingByCategory.length === 0 && expenseCategories.length > 0) {
       const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
+
+      // Show all categories (with or without budget) - sorted by budget amount
       spendingByCategory = expenseCategories
-        .filter(c => Number(c.monthlyBudget || 0) > 0)
         .map(c => ({
           category: c.name || 'Other',
           amount: Number(c.monthlyBudget || 0),
-          percentage: totalBudgetAmount > 0 ? Math.round((Number(c.monthlyBudget || 0) / totalBudgetAmount) * 100) : 0,
+          percentage: totalBudgetAmount > 0 ? Math.round((Number(c.monthlyBudget || 0) / totalBudgetAmount) * 100) : Math.round(100 / expenseCategories.length),
           iconCodePoint: c.iconCodePoint || this.getCategoryIconCodePoint(c.name?.toLowerCase() || 'other'),
         }))
         .sort((a, b) => b.amount - a.amount)
