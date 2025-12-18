@@ -148,13 +148,17 @@ export class DashboardService {
 
     // Calculate expenses - use actual expenses if available, otherwise use total budget as expected expense
     const actualMonthlyExpense = monthlyExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
-    const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
+    const totalBudgetAmount = expenseCategories.reduce((sum, c) => {
+      const budget = Number(c.monthlyBudget || 0);
+      console.log(`  Category: ${c.name}, monthlyBudget raw: ${c.monthlyBudget}, parsed: ${budget}`);
+      return sum + budget;
+    }, 0);
 
     // Debug logging
     console.log('Dashboard Debug:', {
       userId,
       expenseCategoriesCount: expenseCategories.length,
-      expenseCategories: expenseCategories.map(c => ({ name: c.name, budget: c.monthlyBudget })),
+      expenseCategoriesRaw: JSON.stringify(expenseCategories),
       totalBudgetAmount,
       actualMonthlyExpense,
       monthlyIncome,
