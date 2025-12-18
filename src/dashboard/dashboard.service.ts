@@ -146,8 +146,12 @@ export class DashboardService {
       ? Number(user.monthlySalary) + otherIncome
       : salaryIncome + otherIncome;
 
-    // Calculate expenses
-    const totalMonthlyExpense = monthlyExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
+    // Calculate expenses - use actual expenses if available, otherwise use total budget as expected expense
+    const actualMonthlyExpense = monthlyExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
+    const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
+
+    // If no actual expenses yet, show budget as expected expense (for new users after onboarding)
+    const totalMonthlyExpense = actualMonthlyExpense > 0 ? actualMonthlyExpense : totalBudgetAmount;
 
     // Calculate balance
     const totalBalance = monthlyIncome - totalMonthlyExpense;
@@ -156,9 +160,10 @@ export class DashboardService {
     const saved = monthlyIncome - totalMonthlyExpense;
     const savedPercentage = monthlyIncome > 0 ? Math.round((saved / monthlyIncome) * 100) : 0;
 
-    // Calculate budget
-    const totalBudget = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
-    const budgetUsedPercentage = totalBudget > 0 ? Math.round((totalMonthlyExpense / totalBudget) * 100) : 0;
+    // Calculate budget - use the already calculated totalBudgetAmount
+    const totalBudget = totalBudgetAmount;
+    // Budget used percentage should be based on actual expenses, not the fallback
+    const budgetUsedPercentage = totalBudget > 0 ? Math.round((actualMonthlyExpense / totalBudget) * 100) : 0;
 
     // Calculate goals progress
     const activeGoals = goals.filter(g => g.status === GoalStatus.ACTIVE || g.status === GoalStatus.COMPLETED);
@@ -183,9 +188,8 @@ export class DashboardService {
 
     // If no actual expenses, show budget categories from onboarding
     if (spendingByCategory.length === 0 && expenseCategories.length > 0) {
-      const totalBudgetAmount = expenseCategories.reduce((sum, c) => sum + Number(c.monthlyBudget || 0), 0);
-
       // Show all categories (with or without budget) - sorted by budget amount
+      // Note: totalBudgetAmount is already calculated above
       spendingByCategory = expenseCategories
         .map(c => ({
           category: c.name || 'Other',
