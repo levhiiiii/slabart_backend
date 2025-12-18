@@ -146,6 +146,12 @@ export class DashboardService {
       ? Number(user.monthlySalary) + otherIncome
       : salaryIncome + otherIncome;
 
+    // IMPORTANT DEBUG: Log the raw query result first
+    console.log('=== DASHBOARD DEBUG START ===');
+    console.log('UserId from JWT:', userId);
+    console.log('expenseCategories query result:', expenseCategories);
+    console.log('expenseCategories length:', expenseCategories?.length);
+
     // Calculate expenses - use actual expenses if available, otherwise use total budget as expected expense
     const actualMonthlyExpense = monthlyExpenses.reduce((sum, e) => sum + Number(e.amount), 0);
     const totalBudgetAmount = expenseCategories.reduce((sum, c) => {
@@ -155,14 +161,12 @@ export class DashboardService {
     }, 0);
 
     // Debug logging
-    console.log('Dashboard Debug:', {
-      userId,
-      expenseCategoriesCount: expenseCategories.length,
-      expenseCategoriesRaw: JSON.stringify(expenseCategories),
+    console.log('Calculated values:', {
       totalBudgetAmount,
       actualMonthlyExpense,
       monthlyIncome,
     });
+    console.log('=== DASHBOARD DEBUG END ===');
 
     // If no actual expenses yet, show budget as expected expense (for new users after onboarding)
     const totalMonthlyExpense = actualMonthlyExpense > 0 ? actualMonthlyExpense : totalBudgetAmount;

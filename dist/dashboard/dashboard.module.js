@@ -13,7 +13,13 @@ const salary_entity_1 = require("../database/entities/salary.entity");
 const expense_entity_1 = require("../database/entities/expense.entity");
 const loan_entity_1 = require("../database/entities/loan.entity");
 const borrow_entity_1 = require("../database/entities/borrow.entity");
+const goal_entity_1 = require("../database/entities/goal.entity");
+const expense_category_entity_1 = require("../database/entities/expense-category.entity");
+const income_source_entity_1 = require("../database/entities/income-source.entity");
+const user_entity_1 = require("../database/entities/user.entity");
 const auth_module_1 = require("../auth/auth.module");
+const dashboard_service_1 = require("./dashboard.service");
+const dashboard_controller_1 = require("./dashboard.controller");
 let DashboardModule = class DashboardModule {
 };
 exports.DashboardModule = DashboardModule;
@@ -21,15 +27,20 @@ exports.DashboardModule = DashboardModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([
+                user_entity_1.UserEntity,
                 salary_entity_1.SalaryEntity,
                 expense_entity_1.ExpenseEntity,
                 loan_entity_1.LoanEntity,
                 borrow_entity_1.BorrowEntity,
+                goal_entity_1.GoalEntity,
+                expense_category_entity_1.ExpenseCategoryEntity,
+                income_source_entity_1.IncomeSourceEntity,
             ]),
             auth_module_1.AuthModule,
         ],
-        controllers: [],
-        providers: [],
+        controllers: [dashboard_controller_1.DashboardController],
+        providers: [dashboard_service_1.DashboardService],
+        exports: [dashboard_service_1.DashboardService],
     })
 ], DashboardModule);
 //# sourceMappingURL=dashboard.module.js.map
